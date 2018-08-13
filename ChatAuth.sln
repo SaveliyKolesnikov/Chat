@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAuth", "ChatAuth\ChatAuth.csproj", "{13E7A951-F2CC-4C05-B2A7-856A0AF5B1A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatAuth", "ChatAuth\ChatAuth.csproj", "{6E9BD239-F1EA-41C0-AB0A-CBB8678098A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13E7A951-F2CC-4C05-B2A7-856A0AF5B1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13E7A951-F2CC-4C05-B2A7-856A0AF5B1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13E7A951-F2CC-4C05-B2A7-856A0AF5B1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13E7A951-F2CC-4C05-B2A7-856A0AF5B1A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E9BD239-F1EA-41C0-AB0A-CBB8678098A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E9BD239-F1EA-41C0-AB0A-CBB8678098A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E9BD239-F1EA-41C0-AB0A-CBB8678098A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E9BD239-F1EA-41C0-AB0A-CBB8678098A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
