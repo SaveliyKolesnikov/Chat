@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ChatAuth.Data;
 using ChatAuth.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatAuth.Controllers
@@ -12,15 +13,18 @@ namespace ChatAuth.Controllers
     public class HomeController : Controller
     {
 
-        readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
+        private readonly UserManager<ChatUser> _userManager;
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController(ApplicationDbContext db, UserManager<ChatUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.User = await _userManager.GetUserAsync(User);
             return View(_db.Messages);
         }
 
@@ -38,7 +42,8 @@ namespace ChatAuth.Controllers
                 mes.When = DateTime.Now;
                 await _db.Messages.AddAsync(mes);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return Ok();
+                //return RedirectToAction("Index");
             }
             return View();
         }

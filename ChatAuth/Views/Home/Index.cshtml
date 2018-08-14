@@ -1,22 +1,65 @@
-﻿@using ChatAuth.Models
-@model IEnumerable<ChatAuth.Models.Message>
+﻿@model IEnumerable<ChatAuth.Models.Message>
 
 @{
     ViewData["Title"] = "Index";
+    var username = User.Identity.Name;
 }
 
-<h2>Index</h2>
+@section Styles {
+    <link href="~/css/chat.css" rel="stylesheet" type="text/css" />
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<ul>
-    @foreach (var item in Model)
+<h2 class="text-center">Chat</h2>
+
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3" id="chat">
+        @foreach (var message in Model.OrderBy(m => m.When))
+        {
+            string containerClass, timePosition;
+            if (username == message.UserName)
+            {
+                containerClass = "container darker";
+                timePosition = "time-left";
+            }
+            else
+            {
+                containerClass = "container";
+                timePosition = "time-right";
+            }
+
+            <div class="@containerClass">
+                <p class="sender">@ViewBag.User.Alias</p>
+                <p>@message.Text</p>
+                <span class="@timePosition">@message.When.ToString("g")</span>
+            </div>
+        }
+
+
+    </div>
+    <div class="col-md-6 col-md-offset-3">
+
+        <form asp-action="Create"
+              data-ajax-begin="sendMessage" data-ajax-complete=""
+              data-ajax-failure="alert('fail')" data-ajax-success="messageHasBeenSent"
+              data-ajax="true" data-ajax-method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input name="Text" class="form-control" id="messageText" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const usrName = "@username";
+</script>
+@section Scripts
     {
-        <li>
-            <div> @item.Text</div>
-            <span> @item.UserName</span>
-            <small> @item.When.</small>
-        </li>
-    }
-</ul>
+    <script src="lib/jquery/dist/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="lib/dateFormatter.js"></script>
+    <script src="js/chat.js"></script>
+}
