@@ -28,8 +28,10 @@
                 timePosition = "time-right";
             }
 
+            var sender = message.Sender?.Alias ?? "Anonymous";
+
             <div class="@containerClass">
-                <p class="sender">@ViewBag.User.Alias</p>
+                <p class="sender">@sender</p>
                 <p>@message.Text</p>
                 <span class="@timePosition">@message.When.ToString("g")</span>
             </div>
@@ -50,12 +52,13 @@
             <div class="form-group">
                 <input type="submit" value="Send" class="btn btn-default" />
             </div>
+            <input type="hidden" value="@username" name="username" />
         </form>
     </div>
 </div>
 
 <script>
-    const usrName = "@username";
+    const usrName = "@ViewBag.CurrentUserAlias";
 </script>
 @section Scripts
     {

@@ -6,6 +6,7 @@ using ChatAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatAuth.Controllers
 {
@@ -24,8 +25,9 @@ namespace ChatAuth.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.User = await _userManager.GetUserAsync(User);
-            return View(_db.Messages);
+            ViewBag.CurrentUserAlias = (await _userManager.GetUserAsync(User)).Alias;
+            var messages = await _db.Messages.Include(m => m.Sender).ToArrayAsync();
+            return View(messages);
         }
 
         public IActionResult Create()
@@ -36,16 +38,21 @@ namespace ChatAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Message mes)
         {
+            if (mes.UserName is null)
+                return Error();
+
             if (ModelState.IsValid)
             {
                 mes.UserName = User.Identity.Name;
                 mes.When = DateTime.Now;
+                mes.Sender = await _db.Users.FirstOrDefaultAsync(u => u.UserName == mes.UserName);
                 await _db.Messages.AddAsync(mes);
                 await _db.SaveChangesAsync();
                 return Ok();
                 //return RedirectToAction("Index");
             }
-            return View();
+
+            return Error();
         }
 
         public IActionResult About()
