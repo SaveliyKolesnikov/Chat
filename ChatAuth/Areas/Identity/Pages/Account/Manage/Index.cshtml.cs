@@ -44,7 +44,6 @@ namespace ChatAuth.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -119,20 +118,13 @@ namespace ChatAuth.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-
-            if (!Input.Alias.Equals(user.Alias, StringComparison.CurrentCultureIgnoreCase))
+            if (!Input.Alias.Equals(user.Alias))
             {
-                if (Regex.IsMatch(Input.Alias, @"\w", RegexOptions.IgnoreCase))
-                {
-                    ViewData["Error"] = $"Alias {Input.Alias} must contains only latin characters.";
-                    return await OnGetAsync();
-                }
-
-                if (await _db.Users.AnyAsync(u => u.Alias.Equals(Input.Alias, StringComparison.CurrentCultureIgnoreCase)))
-                {
-                    ViewData["Error"] = $"Alias {Input.Alias} already exists.";
-                    return await OnGetAsync();
-                }
+                //if (await _db.Users.AnyAsync(u => u.Alias.Equals(Input.Alias, StringComparison.CurrentCultureIgnoreCase)))
+                //{
+                //    ViewData["Error"] = $"Alias {Input.Alias} already exists.";
+                //    return await OnGetAsync();
+                //}
 
                 user.Alias = Input.Alias;
             }

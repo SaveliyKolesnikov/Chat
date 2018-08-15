@@ -39,9 +39,6 @@ namespace ChatAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Message mes)
         {
-            if (mes.UserName is null || string.IsNullOrWhiteSpace(mes.Text))
-                return Error();
-
             if (ModelState.IsValid)
             {
                 mes.UserName = User.Identity.Name;
