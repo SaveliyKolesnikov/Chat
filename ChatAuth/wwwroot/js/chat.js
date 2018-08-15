@@ -9,12 +9,21 @@
 // userName is declared in razor page.
 const username = userName;
 const textInput = document.getElementById('messageText');
+const whenInput = document.getElementById('when');
 const chat = document.getElementById('chat');
 
+document.getElementById('submitButton').addEventListener('click', () =>
+    whenInput.value = new Date().format("m/dd/yyyy hh:MM TT")
+);
+
 function sendMessage() {
+    let text = textInput.value;
+    if (text.trim() === "") return;
+
     let when = new Date();
-    let message = new Message(username, textInput.value, when);
+    let message = new Message(username, text, when);
     sendMessageToHub(message);
+    textInput.value = "";
 }
 
 function addMessageToChat(message) {
@@ -32,11 +41,10 @@ function addMessageToChat(message) {
 
     let when = document.createElement('span');
     when.className = isCurrentUserMessage ? "time-left" : "time-right";
-    when.innerHTML = new Date(message.when).format("m/dd/yyyy h:MM TT");
+    when.innerHTML = new Date(message.when).format("m/dd/yyyy hh:MM TT");
 
     container.appendChild(sender);
     container.appendChild(text);
     container.appendChild(when);
     chat.appendChild(container);
-    textInput.value = "";
 }

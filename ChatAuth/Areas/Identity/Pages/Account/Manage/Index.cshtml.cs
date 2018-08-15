@@ -2,11 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using ChatAuth.Data;
 using ChatAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatAuth.Areas.Identity.Pages.Account.Manage
 {
@@ -15,15 +17,18 @@ namespace ChatAuth.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ChatUser> _userManager;
         private readonly SignInManager<ChatUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _db;
 
         public IndexModel(
             UserManager<ChatUser> userManager,
             SignInManager<ChatUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _db = db;
         }
 
         public string Username { get; set; }
@@ -116,6 +121,12 @@ namespace ChatAuth.Areas.Identity.Pages.Account.Manage
 
             if (Input.Alias != user.Alias)
             {
+                if (await _db.Users.AnyAsync(u => u.Alias == Input.Alias))
+                {
+                    ViewData["Error"] = $"Alias {Input.Alias} already exists.";
+                    return await OnGetAsync();
+                }
+
                 user.Alias = Input.Alias;
             }
 

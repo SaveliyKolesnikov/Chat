@@ -25,7 +25,8 @@ namespace ChatAuth.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.CurrentUserAlias = (await _userManager.GetUserAsync(User)).Alias;
+            var currentUser = await _userManager.GetUserAsync(User);
+            ViewBag.CurrentUserAlias = currentUser?.Alias ?? currentUser?.UserName ?? "Anonymous";
             var messages = await _db.Messages.Include(m => m.Sender).ToArrayAsync();
             return View(messages);
         }
@@ -38,14 +39,13 @@ namespace ChatAuth.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Message mes)
         {
-            if (mes.UserName is null)
+            if (mes.UserName is null || string.IsNullOrWhiteSpace(mes.Text))
                 return Error();
 
             if (ModelState.IsValid)
             {
                 mes.UserName = User.Identity.Name;
-                mes.When = DateTime.Now;
-                mes.Sender = await _db.Users.FirstOrDefaultAsync(u => u.UserName == mes.UserName);
+                mes.Sender = await _userManager.GetUserAsync(User);
                 await _db.Messages.AddAsync(mes);
                 await _db.SaveChangesAsync();
                 return Ok();

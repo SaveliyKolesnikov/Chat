@@ -28,12 +28,12 @@
                 timePosition = "time-right";
             }
 
-            var sender = message.Sender?.Alias ?? "Anonymous";
+            var sender = message.Sender?.Alias ?? message.Sender?.UserName ?? "Anonymous";
 
             <div class="@containerClass">
                 <p class="sender">@sender</p>
                 <p>@message.Text</p>
-                <span class="@timePosition">@message.When.ToString("g")</span>
+                <span class="@timePosition">@message.When.ToString("M/dd/yyyy hh:MM tt")</span>
             </div>
         }
 
@@ -42,17 +42,18 @@
     <div class="col-md-6 col-md-offset-3">
 
         <form asp-action="Create"
-              data-ajax-begin="sendMessage" data-ajax-complete=""
-              data-ajax-failure="alert('fail')" data-ajax-success=""
+              data-ajax-begin="" data-ajax-complete=""
+              data-ajax-failure="alert('fail')" data-ajax-success="sendMessage"
               data-ajax="true" data-ajax-method="POST">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input name="Text" class="form-control" id="messageText" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Send" class="btn btn-default" />
+                <input type="submit" value="Send"  id="submitButton" class="btn btn-default" />
             </div>
             <input type="hidden" value="@username" name="username" />
+            <input type="hidden" value="" name="when" id="when"/>
         </form>
     </div>
 </div>
