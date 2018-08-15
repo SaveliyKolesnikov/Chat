@@ -1,42 +1,38 @@
-﻿
-class Message {
+﻿class Message {
     constructor(username, text, when) {
-        this.username = username;
+        this.userName = username;
         this.text = text;
         this.when = when;
     }
 }
 
-const messagesQueue = [];
-const username = usrName;
+// userName is declared in razor page.
+const username = userName;
 const textInput = document.getElementById('messageText');
 const chat = document.getElementById('chat');
 
 function sendMessage() {
-    // 8/14/2018
-    let when = new Date().format("m/dd/yyyy h:MM TT");
+    let when = new Date();
     let message = new Message(username, textInput.value, when);
-    messagesQueue.push(message);
-}
-
-function messageHasBeenSent() {
-    addMessageToChat(messagesQueue.shift())
+    sendMessageToHub(message);
 }
 
 function addMessageToChat(message) {
+    let isCurrentUserMessage = message.userName === username;
+
     let container = document.createElement('div');
-    container.className = "container darker";
+    container.className = isCurrentUserMessage ? "container darker" : "container";
 
     let sender = document.createElement('p');
     sender.className = "sender";
-    sender.innerHTML = message.username;
+    sender.innerHTML = message.userName;
 
     let text = document.createElement('p');
     text.innerHTML = message.text;
 
     let when = document.createElement('span');
-    when.className = "time-left";
-    when.innerHTML = message.when.toString("");
+    when.className = isCurrentUserMessage ? "time-left" : "time-right";
+    when.innerHTML = new Date(message.when).format("m/dd/yyyy h:MM TT");
 
     container.appendChild(sender);
     container.appendChild(text);

@@ -1,4 +1,5 @@
 ﻿using ChatAuth.Data;
+using ChatAuth.Hubs;
 using ChatAuth.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,7 @@ namespace ChatAuth
             services.AddDefaultIdentity<ChatUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -57,6 +59,11 @@ namespace ChatAuth
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChatHub>("/Home/Index");
+            });
 
             app.UseMvc(routes =>
             {
