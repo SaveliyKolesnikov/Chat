@@ -70,7 +70,7 @@ namespace ChatAuth.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("ChatUser created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user as ChatUser);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -80,7 +80,7 @@ namespace ChatAuth.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Name, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _signInManager.SignInAsync(user as ChatUser, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

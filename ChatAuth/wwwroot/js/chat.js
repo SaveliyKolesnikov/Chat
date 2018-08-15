@@ -11,19 +11,24 @@ const username = userName;
 const textInput = document.getElementById('messageText');
 const whenInput = document.getElementById('when');
 const chat = document.getElementById('chat');
+const messagesQueue = [];
 
 document.getElementById('submitButton').addEventListener('click', () =>
     whenInput.value = new Date().format("m/dd/yyyy hh:MM TT")
 );
 
+function clearInputField() {
+    messagesQueue.push(textInput.value);
+    textInput.value = "";
+}
+
 function sendMessage() {
-    let text = textInput.value;
+    let text = messagesQueue.shift() || "";
     if (text.trim() === "") return;
 
     let when = new Date();
     let message = new Message(username, text, when);
     sendMessageToHub(message);
-    textInput.value = "";
 }
 
 function addMessageToChat(message) {

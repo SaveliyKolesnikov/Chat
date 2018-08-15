@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChatAuth.Data;
 using ChatAuth.Models;
@@ -119,9 +120,15 @@ namespace ChatAuth.Areas.Identity.Pages.Account.Manage
             }
 
 
-            if (Input.Alias != user.Alias)
+            if (!Input.Alias.Equals(user.Alias, StringComparison.CurrentCultureIgnoreCase))
             {
-                if (await _db.Users.AnyAsync(u => u.Alias == Input.Alias))
+                if (Regex.IsMatch(Input.Alias, @"\w", RegexOptions.IgnoreCase))
+                {
+                    ViewData["Error"] = $"Alias {Input.Alias} must contains only latin characters.";
+                    return await OnGetAsync();
+                }
+
+                if (await _db.Users.AnyAsync(u => u.Alias.Equals(Input.Alias, StringComparison.CurrentCultureIgnoreCase)))
                 {
                     ViewData["Error"] = $"Alias {Input.Alias} already exists.";
                     return await OnGetAsync();
