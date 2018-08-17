@@ -13,5 +13,14 @@ namespace ChatAuth.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+            builder.Entity<ChatUser>()
+                .Property(u => u.Alias)
+                .HasField("_alias");
+            base.OnModelCreating(builder);
+        }
     }
 }
