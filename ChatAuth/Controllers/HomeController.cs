@@ -14,27 +14,24 @@ namespace ChatAuth.Controllers
     public class HomeController : Controller
     {
 
-        private readonly ApplicationDbContext _db;
+        private readonly IChat _chat;
         private readonly UserManager<ChatUser> _userManager;
 
-        public HomeController(ApplicationDbContext db, UserManager<ChatUser> userManager)
+        public HomeController(IChat chat, UserManager<ChatUser> userManager)
         {
-            _db = db;
+            _chat = chat;
             _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            ViewBag.CurrentUserAlias = currentUser?.Alias ?? currentUser?.UserName ?? "Anonymous";
-            var messages = await _db.Messages.Include(m => m.Sender).ToArrayAsync();
+            ViewBag.CurrentUserAlias = currentUser?.Alias ?? "Anonymous";
+            var messages = _chat.GetMessagesesAsync();
             return View(messages);
         }
 
-        public IActionResult Create()
-        {
-            return View(new Message());
-        }
+        public IActionResult Create() => View(new Message());
 
         [HttpPost]
         public async Task<IActionResult> Create(Message mes)
@@ -43,10 +40,8 @@ namespace ChatAuth.Controllers
             {
                 mes.UserName = User.Identity.Name;
                 mes.Sender = await _userManager.GetUserAsync(User);
-                await _db.Messages.AddAsync(mes);
-                await _db.SaveChangesAsync();
+                await _chat.AddMessageAsync(mes);
                 return Ok();
-                //return RedirectToAction("Index");
             }
 
             return Error();
@@ -66,15 +61,10 @@ namespace ChatAuth.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => 
+            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
