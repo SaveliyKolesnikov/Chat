@@ -5,8 +5,14 @@ namespace ChatAuth.Models
 {
     public class ChatUser : IdentityUser
     {
+        private string _alias;
+
         [PersonalData]
         [StringLength(24, MinimumLength = 1)]
-        public string Alias { get; set; }
+        public string Alias
+        {
+            get => _alias ?? UserName ?? "Anonymous";
+            set => _alias = value;
+        }
     }
 }

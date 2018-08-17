@@ -1,4 +1,5 @@
-﻿using ChatAuth.Data;
+﻿using ChatAuth.ChatExtensionMethods;
+using ChatAuth.Data;
 using ChatAuth.Hubs;
 using ChatAuth.Models;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,8 @@ namespace ChatAuth
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            var db = services.BuildServiceProvider().GetService<ApplicationDbContext>();
+            services.AddChat(db);
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
