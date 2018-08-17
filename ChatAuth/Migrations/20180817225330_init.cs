@@ -41,7 +41,7 @@ namespace ChatAuth.Migrations
                     SecurityStamp = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    Alias = table.Column<string>(nullable: true)
+                    Alias = table.Column<string>(maxLength: 24, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,8 +160,8 @@ namespace ChatAuth.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(nullable: true),
-                    Text = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: false),
+                    Text = table.Column<string>(maxLength: 4096, nullable: false),
                     When = table.Column<DateTime>(nullable: false),
                     SenderId = table.Column<string>(nullable: true)
                 },

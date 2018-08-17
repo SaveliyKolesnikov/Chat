@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatAuth.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180815122421_init")]
+    [Migration("20180817225330_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,8 @@ namespace ChatAuth.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Alias");
+                    b.Property<string>("Alias")
+                        .HasMaxLength(24);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -82,9 +83,12 @@ namespace ChatAuth.Migrations
 
                     b.Property<string>("SenderId");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(4096);
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.Property<DateTime>("When");
 
