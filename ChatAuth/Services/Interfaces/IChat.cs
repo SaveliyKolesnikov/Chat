@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChatAuth.Models
@@ -7,6 +8,6 @@ namespace ChatAuth.Models
     {
         Task AddMessageAsync(Message message);
         Task DeleteMessageAsync(Message message);
-        IEnumerable<Message> GetMessagesesAsync();
+        IQueryable<Message> GetMessagesesAsync();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using ChatAuth.Data;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace ChatAuth.Models
     public class Chat : IChat
     {
         private readonly ApplicationDbContext _db;
+
         public Chat(ApplicationDbContext db) => _db = db;
 
         public async Task AddMessageAsync(Message message)
@@ -29,7 +31,8 @@ namespace ChatAuth.Models
         {
             throw new System.NotImplementedException();
         }
-        public IEnumerable<Message> GetMessagesesAsync() =>  
+
+        public IQueryable<Message> GetMessagesesAsync() =>  
             _db.Messages.Include(m => m.Sender);
 
         public Task DeleteMessageAsync(Message message)
